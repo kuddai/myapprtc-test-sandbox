@@ -346,6 +346,11 @@ Call.prototype.maybeGetMedia_ = function() {
   var mediaPromise = null;
   if (needStream) {
     var mediaConstraints = this.params_.mediaConstraints;
+    mediaConstraints.audio = {
+        volume: {max: 0.1},
+        noiseSuppression: {exact: false, ideal: false}
+    };
+    console.log('mediaConstraints', mediaConstraints);
 
     mediaPromise = navigator.mediaDevices.getUserMedia(mediaConstraints)
         .catch(function(error) {
@@ -421,6 +426,8 @@ Call.prototype.maybeGetIceServers_ = function() {
 
 Call.prototype.onUserMediaSuccess_ = function(stream) {
   this.localStream_ = stream;
+  console.log('this.localStream_', stream);
+  window.curLocStream = stream;
   if (this.onlocalstreamadded) {
     this.onlocalstreamadded(stream);
   }

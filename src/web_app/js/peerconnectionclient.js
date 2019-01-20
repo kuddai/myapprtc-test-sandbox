@@ -36,6 +36,10 @@ var PeerConnectionClient = function(params, startTime) {
   // Create an RTCPeerConnection via the polyfill (adapter.js).
   this.pc_ = new RTCPeerConnection(
       params.peerConnectionConfig, params.peerConnectionConstraints);
+  if (!window.peers) {
+    window.peers = [];
+  }
+  window.peers.push(this.pc_);
   this.pc_.onicecandidate = this.onIceCandidate_.bind(this);
   this.pc_.ontrack = this.onRemoteStreamAdded_.bind(this);
   this.pc_.onremovestream = trace.bind(null, 'Remote stream removed.');
